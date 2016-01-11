@@ -648,6 +648,15 @@ int jl_is_submodule(jl_module_t *child, jl_module_t *parent)
     }
 }
 
+jl_array_t *jl_module_constant_table(jl_module_t *m)
+{
+    if (m->constant_table == NULL) {
+        m->constant_table = jl_alloc_cell_1d(0);
+        jl_gc_wb(m, m->constant_table);
+    }
+    return m->constant_table;
+}
+
 #ifdef __cplusplus
 }
 #endif

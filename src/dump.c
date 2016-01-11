@@ -1969,11 +1969,7 @@ JL_DLLEXPORT jl_value_t *jl_ast_rettype(jl_lambda_info_t *li, jl_value_t *ast)
     JL_LOCK(dump); // Might GC
     DUMP_MODES last_mode = mode;
     mode = MODE_AST;
-    if (li->module->constant_table == NULL) {
-        li->module->constant_table = jl_alloc_cell_1d(0);
-        jl_gc_wb(li->module, li->module->constant_table);
-    }
-    tree_literal_values = li->module->constant_table;
+    tree_literal_values = jl_module_constant_table(li->module);
     ios_t src;
     jl_array_t *bytes = (jl_array_t*)ast;
     ios_mem(&src, 0);
@@ -2001,11 +1997,7 @@ JL_DLLEXPORT jl_value_t *jl_compress_ast(jl_lambda_info_t *li, jl_value_t *ast)
     jl_module_t *last_tem = tree_enclosing_module;
     int en = jl_gc_enable(0); // Might GC
 
-    if (li->module->constant_table == NULL) {
-        li->module->constant_table = jl_alloc_cell_1d(0);
-        jl_gc_wb(li->module, li->module->constant_table);
-    }
-    tree_literal_values = li->module->constant_table;
+    tree_literal_values = jl_module_constant_table(li->module);
     tree_enclosing_module = li->module;
     jl_serialize_value(&dest, jl_lam_body((jl_expr_t*)ast)->etype);
     jl_serialize_value(&dest, ast);

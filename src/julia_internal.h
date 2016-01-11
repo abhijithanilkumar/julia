@@ -174,6 +174,7 @@ void jl_add_method_to_table(jl_methtable_t *mt, jl_tupletype_t *types, jl_lambda
                             jl_svec_t *tvars, int8_t isstaged);
 jl_function_t *jl_module_call_func(jl_module_t *m);
 int jl_is_submodule(jl_module_t *child, jl_module_t *parent);
+jl_array_t *jl_module_constant_table(jl_module_t *m);
 
 typedef struct _jl_ast_context_t jl_ast_context_t;
 jl_ast_context_t *jl_start_parsing_file(const char *fname);
