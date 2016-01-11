@@ -51,6 +51,14 @@ size(A::LQPackedQ, dim::Integer) = 0 < dim ? (dim <= 2 ? size(A.factors, dim) : 
 size(A::LQPackedQ) = size(A.factors)
 
 full(A::LQ) = A[:L]*A[:Q]
+#=
+We construct the full eye here, even though it seems ineffecient, because
+every element in the output matrix is a function of all the elements of
+the input matrix. The eye is modified by the elementary reflectors held
+in A, so this is not just an indexing operation. Note that in general
+explicitly constructing Q, rather than using the ldiv or mult methods,
+may be a wasteful allocation.
+=#
 function full{T}(A::LQPackedQ{T}; thin::Bool=true)
     if thin
         LAPACK.orglq!(copy(A.factors),A.τ)
